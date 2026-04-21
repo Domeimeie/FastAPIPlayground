@@ -6,7 +6,6 @@ from app.routers.posts import router as posts_router
 from app.routers.comments import router as comments_router
 
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
    create_db_and_tables()
@@ -17,3 +16,7 @@ app = FastAPI(lifespan=lifespan)
 app.include_router(users_router)
 app.include_router(posts_router)
 app.include_router(comments_router)
+
+@app.get("/")
+def get_root():
+   return{"message": "Welcome to the coolest blog"}

@@ -1,12 +1,10 @@
-from sqlmodel import Field, SQLModel, Relationship
-from models.user import User
-from models.post import Post
+from sqlmodel import SQLModel, Field, Relationship
+from app.models.post import Post
+from app.models.user import User
 
-class CommentBase(SQLModel):
-    content: str
-
-class Comment(CommentBase, table=True):
+class Comment(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
+    content: str
     post_id: int = Field(foreign_key="post.id")
     post: Post | None = Relationship(back_populates="comments")
     user_id: int = Field(foreign_key="user.id")

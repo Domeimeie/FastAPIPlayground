@@ -1,11 +1,9 @@
-from models.user import UserBase
-from models.post import PostBase
+from pydantic import BaseModel
 
-class CommentCreate(CommentBase):
+class CommentCreate(BaseModel):
     post_id: int
     user_id: int
+    content: str
 
-class CommentPublic(CommentBase):
+class CommentPublic(BaseModel):
     id: int
-    post: PostBase
-    user: UserBase
