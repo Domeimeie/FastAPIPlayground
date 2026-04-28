@@ -5,6 +5,7 @@ from app.services.post import (
     create_post as create_post_service,
     get_posts as get_posts_service,
     delete_post as delete_post_service,
+    get_post as get_post_service
 )
 from app.database import SessionDep
 
@@ -23,6 +24,9 @@ def get_posts(
 ):
     return get_posts_service(session, offset, limit)
     
+@router.get("/{post_id}", response_model=PostPublic)
+def get_post(post_id: int, session: SessionDep):
+    return get_post_service(post_id, session)
 
 @router.delete("/{post_id}")
 def delete_post(post_id: int, session: SessionDep):

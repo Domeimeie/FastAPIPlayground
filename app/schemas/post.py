@@ -9,3 +9,5 @@ class PostCreate(BaseModel):
 class PostPublic(BaseModel):
     id: int
     user: User
+    title: str
+    content: str

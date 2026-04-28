@@ -1,1 +1,1 @@
-uv run pytest ./test
+uv run pytest ./tests

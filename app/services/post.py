@@ -15,6 +15,12 @@ def get_posts(session: SessionDep, offset: int = 0, limit: int = 100):
     posts = session.exec(select(Post).offset(offset).limit(limit)).all()
     return posts
 
+def get_post(post_id: int, session: SessionDep) -> Post:
+    post = session.exec(select(Post).where(Post.id == post_id)).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    return post
+
 def delete_post(post_id: int, session: SessionDep):
     post = session.get(Post, post_id)
     if not post:
