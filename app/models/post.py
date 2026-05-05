@@ -6,7 +6,7 @@ class Post(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     title: str
     content: str
-    date: datetime = Field(default_factory=datetime.now)  
     user_id: int = Field(foreign_key="user.id")
     user: User | None = Relationship(back_populates="posts")
     comments: list["Comment"] = Relationship(back_populates="post")
+    created_at: datetime = Field(default_factory=datetime.now, nullable=False)  

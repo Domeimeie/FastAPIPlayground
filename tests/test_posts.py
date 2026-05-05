@@ -1,3 +1,5 @@
+from datetime import datetime
+
 def test_get_post_detail(client, first_post_by_homer):
     response = client.get(f"/posts/{first_post_by_homer.id}")
     assert response.status_code == 200
@@ -15,5 +17,9 @@ def test_post_date_created(client, first_post_by_homer):
     response = client.get(f"/posts/{first_post_by_homer.id}")
     assert response.status_code == 200
     data = response.json()
-    assert data["id"] == first_post_by_homer.id
-    assert data["date"] != None
+    
+    assert data["created_at"] != None
+    created_at = datetime.fromisoformat(data["created_at"])
+    now = datetime.now()
+    assert created_at <= now
+    assert (now - created_at).total_seconds() < 5
