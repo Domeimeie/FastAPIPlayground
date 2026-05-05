@@ -1,0 +1,51 @@
+digraph AuthFlow {
+    rankdir=TB;
+    bgcolor="#fafafa";
+    fontname="Helvetica";
+    nodesep=0.5;
+    ranksep=0.7;
+    compound=true;
+
+    node [fontname="Helvetica", fontsize=12, shape=box, style="filled,rounded", color="#333333", penwidth=1.2];
+    edge [fontname="Helvetica", fontsize=11, color="#444444"];
+
+    // ─────────────── PHASE 1: LOGIN ───────────────
+    subgraph cluster_login {
+        label=<<b>① Login &nbsp;&mdash;&nbsp; OAuth2 Password Flow</b>>;
+        labeljust="l";
+        fontsize=15;
+        style="rounded,filled";
+        fillcolor="#eef5ff";
+        color="#2b6cb0";
+        margin=18;
+
+        client1 [label="Client\n(Browser / App)", fillcolor="#ffffff"];
+        authsrv [label=<<b>Authorization Server</b><br/><font point-size="10">(prüft Passwort,<br/>stellt Token aus)</font>>, fillcolor="#dbeafe"];
+        users   [label="Users", shape=cylinder, fillcolor="#fff7e6", color="#b7791f"];
+
+        client1 -> authsrv [label="  E-Mail + Passwort  "];
+        authsrv -> users   [label="  Hash vergleichen  "];
+        authsrv -> client1 [label="  Access Token (JWT)  ", color="#2b6cb0", penwidth=2, constraint=false];
+    }
+
+    // ─────────────── PHASE 2: PROTECTED REQUEST ───────────────
+    subgraph cluster_request {
+        label=<<b>② Jeder weitere Request</b>>;
+        labeljust="l";
+        fontsize=15;
+        style="rounded,filled";
+        fillcolor="#f0fdf4";
+        color="#276749";
+        margin=18;
+
+        client2 [label="Client\n(Browser / App)", fillcolor="#ffffff"];
+        ressrv  [label=<<b>Resource Server</b><br/><font point-size="10">(prüft Signatur des Tokens,<br/>liefert Daten)</font>>, fillcolor="#dcfce7"];
+        posts   [label="Posts", shape=cylinder, fillcolor="#fff7e6", color="#b7791f"];
+
+        client2 -> ressrv [label="  Anfrage + Bearer Token  "];
+        ressrv  -> ressrv [label="  JWT verifizieren  "];
+        ressrv  -> posts  [label="  Daten lesen / schreiben  "];
+        ressrv  -> client2 [label="  Antwort  ", color="#276749", penwidth=2, constraint=false];
+    }
+
+}
