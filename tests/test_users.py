@@ -32,7 +32,6 @@ def test_find_user_by_id(client):
     data = response.json()
     assert data["email"] == "dodododododod@dododod.local"
 
-
 def test_find_user_by_id_fail(client):
     response = client.get("/users/1")
     assert response.status_code == 404
