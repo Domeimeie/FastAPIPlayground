@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from fastapi.security import HTTPBearer
 from app.services.user import (
     create_user as create_user_service,
     get_users as get_users_service,
@@ -9,6 +10,7 @@ from app.schemas.user import UserPublic, UserCreate
 from app.database import SessionDep
 from typing import Annotated
 from fastapi import Query
+from app.security import token_auth
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -19,8 +21,10 @@ def create_user(user: UserCreate, session: SessionDep) -> UserPublic:
 @router.get("/")
 def get_users(
     session: SessionDep,
+    token: dict = Depends(token_auth),
     offset: int = 0,
     limit: Annotated[int, Query(le=100)] = 100,
+
 ) -> list[UserPublic]:
     return get_users_service(session=session, offset=offset, limit=limit)
 
