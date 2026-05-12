@@ -34,10 +34,3 @@ def delete_user(user_id: int, session: SessionDep) -> dict:
     session.delete(user)
     session.commit()
     return {"ok": True}
-
-def authenticate_user(email: str, password: str, session: SessionDep) -> str:
-    user = session.exec(select(User).where(User.email == email)).first()
-    if not user or password != user.password:
-        raise HTTPException(status_code=401, detail="Invalid Login Details")
-    encoded_jwt = jwt.encode({"user.id": user.id}, "secret", algorithm="HS256")
-    return encoded_jwt
